@@ -33,8 +33,14 @@ class ProductController extends BaseController
         $input = $request->all();
    
         $validator = Validator::make($input, [
-            'name' => 'required',
-            'detail' => 'required'
+              'kode_barang' => 'required', 
+              'nama_komponen' => 'required',
+              'gambar' => 'nullable',
+              'satuan' => 'required',
+              'jumlah' => 'required',
+              'lokasi_simpan' => 'required',
+              'stok_min' => 'required',
+              'stok_max' => 'required'
         ]);
    
         if($validator->fails()){
@@ -75,16 +81,28 @@ class ProductController extends BaseController
         $input = $request->all();
    
         $validator = Validator::make($input, [
-            'name' => 'required',
-            'detail' => 'required'
+              'kode_barang' => 'required', 
+              'nama_komponen' => 'required',
+              'gambar' => 'nullable',
+              'satuan' => 'required',
+              'jumlah' => 'required',
+              'lokasi_simpan' => 'required',
+              'stok_min' => 'required',
+              'stok_max' => 'required'
         ]);
    
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
    
-        $product->name = $input['name'];
-        $product->detail = $input['detail'];
+        $product->kode_barang = $input['kode_barang'];
+        $product->nama_komponen = $input['nama_komponen'];
+        $product->gambar = $input['gambar'];
+        $product->satuan = $input['satuan'];
+        $product->jumlah = $input['jumlah'];
+        $product->lokasi_simpan = $input['lokasi_simpan'];
+        $product->stok_min = $input['stok_min'];
+        $product->stok_max = $input['stok_max'];
         $product->save();
    
         return $this->sendResponse(new ProductResource($product), 'Product updated successfully.');

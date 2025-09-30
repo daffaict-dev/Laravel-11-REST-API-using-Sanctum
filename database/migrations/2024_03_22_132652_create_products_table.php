@@ -13,8 +13,14 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('detail');
+            $table->string('kode_barang');
+            $table->string('nama_komponen');
+            $table->string('gambar')->nullable();
+            $table->string('satuan');
+            $table->integer('jumlah');
+            $table->string('lokasi_simpan');
+            $table->integer('stok_min');
+            $table->integer('stok_max');
             $table->timestamps();
         });
     }

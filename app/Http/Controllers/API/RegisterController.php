@@ -1,6 +1,10 @@
 <?php
    
-namespace App\Http\Controllers\API;
+
+/**
+ * @return \Illuminate\Http\JsonResponse
+ */
+   namespace App\Http\Controllers\API;
    
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
@@ -19,10 +23,8 @@ class RegisterController extends BaseController
     public function register(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email',
+            'username' => 'required',
             'password' => 'required',
-            'c_password' => 'required|same:password',
         ]);
    
         if($validator->fails()){
@@ -33,7 +35,7 @@ class RegisterController extends BaseController
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $success['token'] =  $user->createToken('MyApp')->plainTextToken;
-        $success['name'] =  $user->name;
+        $success['username'] =  $user->username;
    
         return $this->sendResponse($success, 'User register successfully.');
     }
@@ -45,10 +47,10 @@ class RegisterController extends BaseController
      */
     public function login(Request $request): JsonResponse
     {
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
+        if(Auth::attempt(['username' => $request->username, 'password' => $request->password])){ 
             $user = Auth::user(); 
             $success['token'] =  $user->createToken('MyApp')->plainTextToken; 
-            $success['name'] =  $user->name;
+            $success['name'] =  $user->username;
    
             return $this->sendResponse($success, 'User login successfully.');
         } 
@@ -56,4 +58,26 @@ class RegisterController extends BaseController
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         } 
     }
+
+    public function logout(Request $request)
+    {
+        // pastikan user sudah login
+        $user = $request->user();
+
+        if ($user) {
+            // hapus token yang dipakai untuk autentikasi sekarang
+            $user->currentAccessToken()->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Logout berhasil'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Tidak ada user yang sedang login'
+        ], 401);
+    }
+
 }

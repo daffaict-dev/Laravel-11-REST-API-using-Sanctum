@@ -15,6 +15,6 @@ class Product extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'detail'
+        'kode_barang', 'nama_komponen', 'gambar', 'satuan', 'jumlah', 'lokasi_simpan', 'stok_min', 'stok_max'
     ];
 }
