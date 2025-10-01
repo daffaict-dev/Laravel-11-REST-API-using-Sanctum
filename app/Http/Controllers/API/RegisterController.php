@@ -64,6 +64,7 @@ class RegisterController extends BaseController
 
         return $this->sendResponse([
             'user' => $user,
+            'token' => $token,
         ], 'User login successfully.')
         ->cookie(
             'token',
